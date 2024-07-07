@@ -1,25 +1,20 @@
-#ifndef MEMORY_FUNCTIONS_H
-#define MEMORY_FUNCTIONS_H
-
 /*
  * Obtém o endereço de brk
  */
-void setup_brk(); 
+void setup_brk();
 
 /*
  * Restaura o endereço de brk
  */
-void dismiss_brk(); 
+void dismiss_brk();
 
-/*
- * Executa brk para abrir um bloco de "bytes" bytes 
+/*1. Procura bloco livre com tamanho igual ou maior que a requisição 
+ *2. Se encontrar, marca ocupação e retorna o endereço do bloco
+ *3. Se não encontrar, abre espaço para um novo bloco
  */
 void* memory_alloc(unsigned long int bytes); 
 
 /*
- * Não executa nada
+ * Marca um bloco ocupado como livre
  */
-int memory_free(void *pointer); 
-
-#endif // MEMORY_FUNCTIONS_H  
-
+int memory_free(void *pointer);
