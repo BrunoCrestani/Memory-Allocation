@@ -16,5 +16,5 @@ clean:
 	rm -rf ./*.o
 
 purge:
-	clean
+	make clean
 	rm -rf main
