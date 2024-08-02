@@ -43,11 +43,16 @@ int main() {
 	printf("==>> DESALOCANDO TUDO:\n");
 	memory_free(s_pnt);
 	memory_free(t_pnt);
-	printf("\tIND. DE USO: %s\n", *((long long*) (s_pnt-16)) == 0 ? "CORRETO!" : "INCORRETO!");
-	printf("\tTAMANHO: %s\n", *((long long*) (s_pnt-8)) == 50 ? "CORRETO!" : "INCORRETO!");
-	printf("\tIND. DE USO: %s\n", *((long long*) (t_pnt-16)) == 0 ? "CORRETO!" : "INCORRETO!");
-	printf("\tTAMANHO: %s\n", *((long long*) (t_pnt-8)) == 100 ? "CORRETO!" : "INCORRETO!");
 
+    printf("\tIND. DE USO: %s\n", *((long long*) (s_pnt-16)) == 0 ? "CORRETO!" : "INCORRETO!");
+    printf("\tTAMANHO: %s\n", *((long long*) (s_pnt-8)) == 50 ? "CORRETO!" : "INCORRETO!");
+    printf("\tIND. DE USO: %s\n", *((long long*) (t_pnt-16)) == 0 ? "CORRETO!" : "INCORRETO!");
+    printf("\tTAMANHO: %s\n", *((long long*) (t_pnt-8)) == 100 ? "CORRETO!" : "INCORRETO!");
+
+	printf("==>> DESALOCANDO TUDO:\n");
+	memory_free(t_pnt);
+    printf("\tIND. DE USO: %s\n", *((long long*) (t_pnt-16)) == 0 ? "CORRETO!" : "INCORRETO!");
+    printf("\tTAMANHO: %s\n", *((long long*) (t_pnt-8)) == 100 ? "CORRETO!" : "INCORRETO!");
 
 	printf("==>> DESALOCANDO A PILHA (ILEGAL):\n");
 	unsigned long long stack_var = 0;
