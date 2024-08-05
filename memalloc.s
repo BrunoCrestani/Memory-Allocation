@@ -54,16 +54,16 @@ memory_alloc:
     movq %r11, %r14 #Salva o endereco do bloco em r14 
     jmp .next_block
 
-fit:
+    .realloc_block:
     movq $1, (%r14) #Indica que o bloco agora esta ocupado
     
     movq %r15, %r12 #r12 recebe o tamanho do bloco atual
     subq %r10, %r12 #diminui o rdi do tamanho
-    cmpq $17, %r12
+    cmpq $17, %r12 #Vericia se existe espaco para realizar splitting
     jge .splitting
 
-    addq $16, %r14
-    movq %r14, %rax
+    addq $16, %r14 #Avanca o tamanho do cabecalho
+    movq %r14, %rax #Retorna o endereco atual
     ret
 
 alloc_block:
@@ -71,21 +71,20 @@ alloc_block:
     movq %r9, %r12 #salva o endereco
     addq %rdi, %r9 #Adiciona o tamanho do bloco solicitado na posicao pos tags
 
-    movq %r9, %rdi
-
-    movq $12, %rax
+    movq %r9, %rdi 
+    movq $12, %rax #Novo valor de brk
     syscall
 
     movq current_brk, %r8 # Endereco do novo bloco
     movq $1, (%r8) # current brk recebe 1
-    movq %r10, 8(%r8) 
+    movq %r10, 8(%r8) # currentbrk + 8 recebe o tamanho solicitado
     movq %r9, current_brk # novo current brk apos o novo bloco
 
     movq %r12, %rax #retornar endereco do novo bloco
     ret
 
 .next_block:
-    addq 8(%r11), %r11 #Adiciona qual for o tamanho do bloco ocupado no endereco que estamos (vai ate o fim do bloco - 9)
+    addq 8(%r11), %r11 #Adiciona qual for o tamanho do bloco ocupado no endereco que estamos (vai ate o fim do bloco - 16)
     addq $16, %r11  #Pula os 16 bits restantes
 
     cmpq %r9, %r11 #Verifica se ainda estamos dentro da Heap
@@ -94,7 +93,7 @@ alloc_block:
     cmpq $0, %r14 #se r14 == 0, podemos alocar um bloco
     je alloc_block
 
-    jmp fit
+    jmp .realloc_block
 
 .splitting:
     movq %r10, 8(%r14) #Demarca o espaco do primeiro bloco
@@ -104,8 +103,8 @@ alloc_block:
     addq %r10, %r14 #r14 = r14 + o tamanho requerido
     movq $0, (%r14) #demarca o bit para 0
 
-    subq $16, %r12
-    movq %r12, 8(%r14)
+    subq $16, %r12 #Corrige a posicao de r12
+    movq %r12, 8(%r14) #Insere r12 em r14+8
 
     movq %r13, %rax
     ret
